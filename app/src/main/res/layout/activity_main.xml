@@ -1,37 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.tak.dummyfreeapi.MyViewModel" />
     </data>
 
-    <Button
-        android:id="@+id/loadDataButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Load Data"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:onClick="onLoadDataClick"/>
 
 
-    <TextView
-        android:id="@+id/resultTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:layout_below="@id/loadDataButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
-</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context=".MainActivity">
 
 
-<!--dataBinding 활용. xml 레이아웃 파일에서 뷰와 데이터를 바인딩하여 뷰를 업데이트 -->
+        <Button
+            android:id="@+id/loadDataButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Load Data"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            />
+        <!-- android:onClick="onLoadDataClick"
+                            or = "@{viewModel::onLoadDataClick}"
+            그리고 설명. @{ } 이거는 데이터 바인딩 표현식. () 는 함수 호출을 뜻 함.
+            android:onClick="@{() -> viewModel.getPosts()}"-->
+
+
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_below="@id/loadDataButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"/>
+    </RelativeLayout>
+</layout>
+
+
+
+    <!--dataBinding 활용. xml 레이아웃 파일에서 뷰와 데이터를 바인딩하여 뷰를 업데이트 -->
+<!-- 그러기 위해서 내가한 것.
+  1. build.gradle 파일에 dataBinding { enable = true } 추가
+  2. 지금 이 xml 파일 전체를 <layout ... 태그로 감싸기
+  3. 사용하려는 액티비티인 MainActivity 에서 binding 을 뷰바인딩 세팅해놓은걸 데이터 바인딩으로 수정
+        private lateinit var binding : ActivityMainBinding
+        ...
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+            //...
+        }
+
+    여기까지 해야 사용할 준비 완료. 이제 이 xml 파일에서 <data> 태그 사용해서 변수설정 가능 -->

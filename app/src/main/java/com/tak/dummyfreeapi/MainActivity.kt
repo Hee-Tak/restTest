@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.tak.dummyfreeapi.databinding.ActivityMainBinding
 import retrofit2.Retrofit
@@ -13,28 +14,51 @@ import java.lang.Exception
 class MainActivity : AppCompatActivity() {
 
 
-    private val viewModel : MyViewModel by viewModels()
 
-    val binding = ActivityMainBinding.inflate(layoutInflater)
+
+    private lateinit var binding : ActivityMainBinding //xml 파일 명이 CamelCase 표기로 바뀌고 Binding 이 붙는다.
+    private val viewModel : MyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //val binding = ActivityMainBinding.inflate(layoutInflater)
+        //setContentView(binding.root)
 
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this   //LiveData 의 관찰을 활성화하기 위해 lifecycleOwner 설정
 
-        binding.loadDataButton.setOnClickListener {  }
+        binding.viewModel = viewModel   //뷰 모델을 레이아웃과 연결
+
+        binding.loadDataButton.setOnClickListener {
+            //액티비티가 종료되지 않은 상태에서만 데이터를 가져오도록 확인
+            if(!isFinishing) {
+                viewModel.getPosts()
+            }
+        }
+
+        observeViewModel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
 
     }
 
-    fun onLoadDataClick(view: View){
-        //버튼 클릭 시 데이터 로딩
-        viewModel.getPosts()
-
-        //뷰모델에서 LiveData를 사용하여 데이터를 관찰(observe)하고, 데이터가 변경되었을 때 화면을 갱신할 수 있다.
-        viewModel.posts.observe(this, Observer{ posts ->
-            //화면에 데이터를 표시
+    private fun observeViewModel() {
+        viewModel.posts.observe(this, Observer{posts ->
+            //데이터가 변경될 때마다 호출되는 부분
             binding.resultTextView.text = posts.joinToString("\n") { it.title }
+
         })
     }
 
 }
+
+
+/**
+ * 데이터 바인딩
+ * - XML 레이아웃 파일에서 뷰와 데이터를 바인딩하여 뷰를 업데이트하거나, 이벤트를 처리할 수 있도록 해주는 라이브러리.
+ * - 기존의 방식은 findViewById 메소드를 이용해서 뷰를 찾아야 했지만, 데이터 바인딩을 사용하면 XML 에서 바로 뷰를 참조할 수 있다.
+ *
+ */

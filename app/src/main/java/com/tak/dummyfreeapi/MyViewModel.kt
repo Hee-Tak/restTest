@@ -19,9 +19,15 @@ class MyViewModel : ViewModel() {
 
     private val apiService = retrofit.create(JsonPlaceholderApiService::class.java)
 
-
     private val _posts = MutableLiveData<List<Post>>()
     val posts : LiveData<List<Post>> get() = _posts
+
+    //val result : LiveData<String> = Transformations.map(_posts) { posts ->
+    //    // 여기에서 결과를 가공하여 필요한 형태로 반환
+    //    posts.joinToString("\n") { it.title }
+    //}
+
+
 
     fun getPosts() {
         viewModelScope.launch {
@@ -48,6 +54,9 @@ class MyViewModel : ViewModel() {
         }
 
     }
+
+
+
 }
 
 

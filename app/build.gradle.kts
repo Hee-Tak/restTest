@@ -38,9 +38,9 @@ android {
         enable = true
     }
 
-    buildFeatures {
-        dataBinding = true
-    }
+     dataBinding {
+         enable = true
+     }
 }
 
 dependencies {
@@ -57,9 +57,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")  //viewModelScope 쓸려고
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.activity:activity-ktx:1.8.2")
 
-    implementation("androidx.databinding:databinding-runtime:8.3.0")
+    implementation("androidx.databinding:databinding-ktx:8.3.0")
+
+
 
 }
