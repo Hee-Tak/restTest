@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
+import kotlin.concurrent.thread
 
 class MyViewModel : ViewModel() {
 
@@ -40,7 +41,10 @@ class MyViewModel : ViewModel() {
                     //posts?.forEach {
                     //    println("Post Title: ${it.title}")
                     //}
-                    _posts.postValue(posts!!)
+                    thread {
+                        _posts.postValue(posts!!)
+                    }
+
                 } else {
                     // 오류 처리
                     //println("Error: ${response.code()}")
@@ -49,6 +53,7 @@ class MyViewModel : ViewModel() {
 
             } catch (e:Exception){
                 e.printStackTrace()
+                Log.e("MyViewmModel", "Error: ${e.message}")
             }
 
         }

@@ -2,6 +2,8 @@ package com.tak.dummyfreeapi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.loadDataButton.setOnClickListener {
             //액티비티가 종료되지 않은 상태에서만 데이터를 가져오도록 확인
-            if(!isFinishing) {
+            if(!isFinishing && !isDestroyed) {
                 viewModel.getPosts()
             }
         }
@@ -39,16 +41,21 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
     }
 
+    override fun onStop() {
+        super.onStop()
+        viewModel.posts.removeObservers(this)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-
-
+        Log.d("MainActivity", "onDestroy called")
     }
 
     private fun observeViewModel() {
         viewModel.posts.observe(this, Observer{posts ->
             //데이터가 변경될 때마다 호출되는 부분
             binding.resultTextView.text = posts.joinToString("\n") { it.title }
+            SystemClock.sleep(1000)
 
         })
     }

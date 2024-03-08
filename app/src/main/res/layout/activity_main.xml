@@ -40,11 +40,17 @@
             android:id="@+id/resultTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="Start"
+            android:textStyle="bold"
+            android:textSize="30dp"
+            android:textColor="#28290d"
             android:layout_below="@id/loadDataButton"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"/>
+
     </RelativeLayout>
+
+
 </layout>
 
 
